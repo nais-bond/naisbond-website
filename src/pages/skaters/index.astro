@@ -1,0 +1,73 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { SkatersDirectory } from '../../components/SkatersDirectory.jsx';
+
+const deelnemers = await getCollection('deelnemers');
+const uitslagenPosts = await getCollection('uitslagen');
+const uitslagenData = await getCollection('uitslagenData');
+
+// Count how many stage/category result entries each rider appears in, across all contests.
+const resultCounts = new Map<number, number>();
+// Podium finishes (Finales stage only — semis/voorrondes aren't final placements), with contest date for sorting.
+const podiums = new Map<number, { date: Date; rank: number }[]>();
+// Most recent dated result per rider; used to split active riders from the archive.
+const lastResult = new Map<number, number>();
+const cutoff = new Date();
+cutoff.setFullYear(cutoff.getFullYear() - 5);
+
+for (const post of uitslagenPosts) {
+  const entry = uitslagenData.find(d => d.id === post.id);
+  if (!entry) continue;
+  const stages = entry.data as Record<string, Record<string, { id: number }[]>>;
+  for (const [stageName, categories] of Object.entries(stages)) {
+    for (const participants of Object.values(categories)) {
+      participants.forEach((p, idx) => {
+        resultCounts.set(p.id, (resultCounts.get(p.id) ?? 0) + 1);
+        if (!post.data.unknownDate) {
+          lastResult.set(p.id, Math.max(lastResult.get(p.id) ?? 0, post.data.date.getTime()));
+        }
+        if (stageName === 'Finales' && idx < 3) {
+          const list = podiums.get(p.id) ?? [];
+          list.push({ date: post.data.date, rank: idx + 1 });
+          podiums.set(p.id, list);
+        }
+      });
+    }
+  }
+}
+
+const riders = deelnemers
+  .map(d => ({
+    slug: d.data.slug,
+    naam: d.data.naam,
+    volledige_naam: d.data.volledige_naam,
+    categorie: d.data.categorie,
+    image: d.data.image,
+    land: d.data.land,
+    archief: (lastResult.get(d.data.id) ?? 0) < cutoff.getTime(),
+    resultCount: resultCounts.get(d.data.id) ?? 0,
+    medals: (podiums.get(d.data.id) ?? [])
+      .sort((a, b) => b.date.getTime() - a.date.getTime())
+      .slice(0, 3)
+      .map(m => m.rank),
+  }))
+  .sort((a, b) => a.naam.localeCompare(b.naam, 'nl'));
+---
+
+<Layout title="Skaters - NAIS" active="Skaters">
+
+  <section class="nais-pagehead" data-theme="asphalt">
+    <div class="nais-container">
+      <span class="nais-kicker nais-accent nais-eyebrow-block">Skaters</span>
+      <h1 style="font-family:var(--font-display);font-weight:400;font-size:var(--display-xl);line-height:0.9;letter-spacing:var(--tracking-display);color:var(--bone);margin:0;">De riders</h1>
+    </div>
+  </section>
+
+  <section class="nais-section">
+    <div class="nais-container">
+      <SkatersDirectory riders={riders} client:load />
+    </div>
+  </section>
+
+</Layout>

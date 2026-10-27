@@ -1,0 +1,50 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { KalenderList } from '../components/KalenderList.jsx';
+
+const posts = await getCollection('calendar');
+const sorted = posts
+  .filter(p => !p.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const events = sorted.map(e => ({
+  image: typeof e.data.image === 'string' ? e.data.image : e.data.image?.src || '',
+  title: e.data.title,
+  date: e.data.dateLabel ?? e.data.date.toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: '2-digit' }).replace(/\//g, '.'),
+  city: e.data.tags.find((t: string) => !['Contest','Demo','uitgelicht','Uitgelicht'].includes(t)) ?? '',
+  tags: e.data.tags.filter((t: string) => t.toLowerCase() !== 'uitgelicht').slice(0, 4),
+  href: `/kalender/${e.id}`,
+}));
+
+// Collect unique meaningful tags (skip uitgelicht) sorted by frequency
+const tagCounts: Record<string, number> = {};
+for (const e of events) {
+  for (const t of e.tags) {
+    tagCounts[t] = (tagCounts[t] ?? 0) + 1;
+  }
+}
+const allTags = Object.entries(tagCounts)
+  .sort((a, b) => b[1] - a[1])
+  .map(([t]) => t)
+  .slice(0, 8);
+---
+
+<Layout title="Kalender - NAIS" active="Kalender">
+
+  {/* ── HEADER ── */}
+  <section class="nais-pagehead" data-theme="asphalt">
+    <div class="nais-container">
+      <span class="nais-kicker nais-accent nais-eyebrow-block">Kalender 2025-2026</span>
+      <h1 style="font-family:var(--font-display);font-weight:400;font-size:var(--display-xl);line-height:0.9;letter-spacing:var(--tracking-display);color:var(--bone);margin:0;">Agenda</h1>
+    </div>
+  </section>
+
+  {/* ── EVENT GRID (React island) ── */}
+  <section class="nais-section">
+    <div class="nais-container">
+      <KalenderList events={events} allTags={allTags} client:load />
+    </div>
+  </section>
+
+</Layout>

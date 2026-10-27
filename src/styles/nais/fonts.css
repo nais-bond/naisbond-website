@@ -1,0 +1,9 @@
+/* ============================================================
+   NAIS - WEBFONTS (self-hosted via Fontsource, font-display: swap)
+     Anton        - display / sport-poster headlines
+     Archivo      - text & UI workhorse (variable, 400-900)
+   Latin subset only (covers Dutch).
+   ============================================================ */
+
+@import "@fontsource/anton/latin-400.css";
+@import "@fontsource-variable/archivo/wght.css";

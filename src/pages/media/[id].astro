@@ -1,0 +1,164 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('media');
+  return posts.map(post => ({ params: { id: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const dateStr = post.data.date.toLocaleDateString('nl-NL', {
+  day: 'numeric', month: 'long', year: 'numeric',
+});
+---
+
+<Layout title={`${post.data.title} - Media - NAIS`} active="Media" description={post.data.description} type="article">
+
+  {/* ── HERO ── */}
+  <section
+    data-theme="asphalt"
+    style="background:var(--asphalt);padding:var(--space-8) var(--space-6) var(--space-7);"
+  >
+    <div class="nais-container">
+      <div style="display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--concrete-400);margin-bottom:var(--space-5);">
+        <a href="/media" style="color:var(--concrete-300);text-decoration:none;opacity:0.7;">Media</a>
+        <span>/</span>
+        <span style="color:var(--bone);opacity:0.6;">{post.data.show}</span>
+      </div>
+
+      <span style="display:inline-flex;align-items:center;padding:4px 10px;font-family:var(--font-mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;border:1px solid rgba(255,255,255,0.25);border-radius:var(--radius-pill);color:var(--accent-text);background:rgba(19,19,18,0.4);margin-bottom:var(--space-5);">
+        {post.data.show}
+      </span>
+
+      <h1 style="font-family:var(--font-display);font-weight:400;font-size:clamp(30px,4.2vw,56px);line-height:0.92;letter-spacing:var(--tracking-display);color:var(--bone);margin:0 0 var(--space-5);max-width:26ch;">
+        {post.data.title}
+      </h1>
+
+      <div style="display:flex;flex-wrap:wrap;gap:var(--space-5);align-items:center;">
+        <span class="nais-kicker nais-accent">{dateStr}</span>
+        {post.data.tags?.length > 0 && post.data.tags.map((tag: string) => (
+          <span style="padding:3px 8px;font-family:var(--font-mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;border:1px solid rgba(255,255,255,0.2);border-radius:var(--radius-pill);color:var(--concrete-300);">
+            {tag}
+          </span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ── BODY ── */}
+  <section class="nais-section">
+    <div class="media-body-grid">
+
+      {/* Left: video + content */}
+      <div>
+        {post.data.youtube && (
+          <div style="aspect-ratio:16/9;margin-bottom:var(--space-7);border-radius:var(--radius-sm);overflow:hidden;background:var(--asphalt);">
+            <iframe
+              src={post.data.youtube}
+              style="width:100%;height:100%;border:none;display:block;"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              title={post.data.title}
+            />
+          </div>
+        )}
+
+        {post.data.image && !post.data.youtube && (
+          <div style="aspect-ratio:16/9;margin-bottom:var(--space-7);border-radius:var(--radius-sm);overflow:hidden;background:var(--asphalt);">
+            <img src={post.data.image} alt="" style="width:100%;height:100%;object-fit:cover;display:block;" />
+          </div>
+        )}
+
+        <div class="event-prose">
+          <Content />
+        </div>
+
+        {post.data.link && !post.data.youtube && (
+          <a
+            href={post.data.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-sans);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.04em;padding:10px 20px;background:var(--volt);color:var(--volt-ink);border-radius:var(--radius-pill);text-decoration:none;margin-top:var(--space-6);"
+          >
+            Bekijk originele bron →
+          </a>
+        )}
+      </div>
+
+      {/* Right: sticky sidebar */}
+      <aside style="position:sticky;top:var(--space-6);display:flex;flex-direction:column;gap:var(--space-5);">
+        <div style="border:var(--border-bold) solid var(--border-strong);border-radius:var(--radius-sm);overflow:hidden;">
+          <div data-theme="asphalt" style="background:var(--asphalt);padding:var(--space-5);">
+            <p style="font-family:var(--font-sans);font-size:var(--text-sm);color:var(--concrete-200);margin:0;line-height:1.5;">{post.data.description}</p>
+          </div>
+          <div style="background:var(--bg-elevated);padding:var(--space-5);display:flex;flex-direction:column;gap:var(--space-4);">
+            <div>
+              <span class="nais-kicker nais-label-block">Datum</span>
+              <span style="font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text);font-weight:600;">{dateStr}</span>
+            </div>
+            {post.data.author && (
+              <div>
+                <span class="nais-kicker nais-label-block">Auteur</span>
+                <span style="font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text);font-weight:600;">{post.data.author}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <a
+          href="/media"
+          style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-sans);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.04em;padding:10px 16px;background:transparent;color:var(--text-muted);border:var(--border-bold) solid var(--border);border-radius:var(--radius-sm);text-decoration:none;"
+        >
+          ← Alle media
+        </a>
+      </aside>
+    </div>
+  </section>
+
+</Layout>
+
+<style is:global>
+  .media-body-grid {
+    max-width: var(--container);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: var(--space-8);
+    align-items: start;
+  }
+  @media (max-width: 700px) {
+    .media-body-grid {
+      grid-template-columns: 1fr;
+    }
+    .media-body-grid aside {
+      position: static;
+    }
+  }
+  .event-prose {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.65;
+    color: var(--text);
+  }
+  .event-prose h1, .event-prose h2, .event-prose h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: var(--tracking-display);
+    line-height: 0.95;
+    margin: var(--space-7) 0 var(--space-4);
+    color: var(--text);
+  }
+  .event-prose h1 { font-size: var(--prose-h1); }
+  .event-prose h2 { font-size: var(--prose-h2); }
+  .event-prose h3 { font-size: var(--prose-h3); font-family: var(--font-sans); font-weight: 700; }
+  .event-prose p { margin: 0 0 var(--space-4); }
+  .event-prose ul, .event-prose ol { padding-left: var(--space-5); margin: 0 0 var(--space-4); }
+  .event-prose li { margin-bottom: var(--space-2); }
+  .event-prose a { color: var(--accent-text); text-decoration: underline; }
+  .event-prose strong { font-weight: 700; color: var(--text); }
+  .event-prose img { width: 100%; border-radius: var(--radius-sm); margin: var(--space-6) 0; }
+  .event-prose hr { border: none; border-top: var(--border-hair) solid var(--border); margin: var(--space-7) 0; }
+</style>

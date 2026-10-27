@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Pagina niet gevonden - NAIS" description="Deze pagina bestaat niet (meer).">
+  <section data-theme="asphalt" style="background:var(--asphalt);color:var(--bone);padding:var(--space-9) var(--space-6);min-height:60dvh;display:flex;align-items:center;">
+    <div style="max-width:var(--container);margin:0 auto;width:100%;">
+      <span class="nais-kicker nais-accent">Foutcode 404</span>
+      <h1 style="font-family:var(--font-display);font-weight:400;font-size:var(--display-2xl);line-height:0.92;letter-spacing:var(--tracking-display);color:var(--bone);margin:var(--space-4) 0 var(--space-4);">Deze lijn<br />ligt er niet.</h1>
+      <p style="font-family:var(--font-sans);font-size:var(--text-lg);color:var(--concrete-300);max-width:42ch;margin:0 0 var(--space-6);line-height:1.5;">
+        De pagina is verplaatst of bestaat niet meer. Kies een route hieronder.
+      </p>
+      <div style="display:flex;gap:var(--space-3);flex-wrap:wrap;">
+        <a class="nais-btn" href="/kalender" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-sans);font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:0.04em;padding:12px 20px;background:var(--volt);color:var(--volt-ink);border:1px solid var(--volt);border-radius:var(--radius-pill);text-decoration:none;">Naar de kalender →</a>
+        <a class="nais-btn" href="/lessen" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-sans);font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:0.04em;padding:12px 20px;background:transparent;color:var(--bone);border:1px solid var(--bone);border-radius:var(--radius-pill);text-decoration:none;">Vind een les</a>
+        <a class="nais-btn" href="/" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-sans);font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:0.04em;padding:12px 20px;background:transparent;color:var(--bone);border:2px solid var(--asphalt-line);border-radius:var(--radius-sm);text-decoration:none;">Terug naar home</a>
+      </div>
+    </div>
+  </section>
+</Layout>

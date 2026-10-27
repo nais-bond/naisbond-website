@@ -1,0 +1,134 @@
+/* ============================================================
+   NAIS — BASE
+   Element defaults + a few reusable brand primitives that the
+   whole system leans on (kicker label, etc.)
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; color-scheme: light; }
+html.dark { color-scheme: dark; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+  font-weight: var(--weight-regular);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Display headings — condensed, tight. Uppercase is opt-in:
+   add text-transform:uppercase only where you want max impact. */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-display);
+  margin: 0;
+}
+h1 { font-size: var(--display-xl); }
+h2 { font-size: var(--display-lg); }
+h3 { font-size: var(--display-md); }
+
+h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-snug);
+  margin: 0;
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+
+::selection { background: var(--volt); color: var(--volt-ink); }
+
+/* ---- Reusable brand primitives ---------------------------- */
+
+/* Mono kicker / eyebrow label */
+.nais-kicker {
+  font-family: var(--font-mono);
+  font-size: var(--label-sm);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Lead paragraph — the calm line under a hero or section head.
+   Lighter and a touch smaller than body so the headline keeps the
+   weight; sets a comfortable measure for readability. */
+.nais-lead {
+  font-family: var(--font-sans);
+  font-size: clamp(1.0625rem, 0.9rem + 0.5vw, 1.375rem); /* ~17 → 22px */
+  font-weight: var(--weight-regular);
+  line-height: 1.55;
+  color: var(--text-muted);
+  max-width: 46ch;
+  text-wrap: pretty;
+}
+
+/* Highlight run on text.
+   Uses a deepened tint so it reads on the bone page bg.         */
+.nais-mark {
+  background: var(--volt);
+  color: var(--volt-ink);
+  padding: 0 0.12em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* Keyboard focus: visible on every interactive element, theme-aware.
+   Light ring on dark grounds, ink ring on light; the ring is offset so it
+   never merges with a button fill. */
+:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 3px;
+  border-radius: var(--radius-xs);
+}
+[data-theme="asphalt"] :focus-visible { outline-color: var(--volt); }
+
+/* Link-buttons written inline in pages: shared hover / press feedback
+   (colours stay inline per button; this only adds the physical response). */
+.nais-btn { transition: transform var(--dur-fast) var(--ease-snap), box-shadow var(--dur-fast) var(--ease-snap); }
+.nais-btn { border-radius: var(--radius-pill) !important; }
+.nais-btn:hover { opacity: 0.86; }
+.nais-btn:active { transform: scale(0.98); }
+@media (prefers-reduced-motion: reduce) { .nais-btn, .nais-btn:hover, .nais-btn:active { transition: none; transform: none; } }
+
+/* Skater / person cards */
+.nais-person-link { display: flex; text-decoration: none; color: inherit; }
+.nais-person-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  min-height: 150px;
+  background: var(--bg-elevated);
+  border: var(--border-hair) solid var(--border);
+  border-radius: var(--radius-md);
+  transition: transform var(--dur-base) var(--ease-snap), box-shadow var(--dur-base) var(--ease-snap), border-color var(--dur-base) var(--ease-snap);
+}
+.nais-person-link:hover .nais-person-card,
+.nais-person-link:focus-visible .nais-person-card {
+  transform: translateY(-3px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-block);
+}
+@media (prefers-reduced-motion: reduce) { .nais-person-card { transition: none; } .nais-person-link:hover .nais-person-card { transform: none; } }
+
+/* Headings never leave a single word alone on the last line. */
+h1, h2, h3 { text-wrap: balance; }
+
+/* Layout / section primitives (replace repeated inline styles in pages) */
+.nais-container { max-width: var(--container); margin: 0 auto; }
+.nais-section { background: var(--bg); padding: var(--space-8) var(--space-6); }
+.nais-pagehead { background: var(--asphalt); color: var(--bone); padding: var(--space-8) var(--space-6) var(--space-7); }
+.nais-accent { color: var(--accent-text); }
+.nais-eyebrow-block { display: block; margin-bottom: var(--space-3); }
+.nais-label-block { color: var(--text-muted); display: block; margin-bottom: 4px; }

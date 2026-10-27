@@ -1,0 +1,74 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('uitslagen');
+const sorted = posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<Layout title="Uitslagen - NAIS" active="Uitslagen">
+
+  <section class="nais-pagehead" data-theme="asphalt">
+    <div class="nais-container">
+      <span class="nais-kicker nais-accent nais-eyebrow-block">Uitslagen</span>
+      <h1 style="font-family:var(--font-display);font-weight:400;font-size:var(--display-xl);line-height:0.9;letter-spacing:var(--tracking-display);color:var(--bone);margin:0;">Resultaten</h1>
+    </div>
+  </section>
+
+  <section class="nais-section">
+    <div class="nais-container">
+      <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+        {sorted.map(post => (
+          <a
+            href={`/uitslagen/${post.id}`}
+            style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-6);padding:var(--space-5) var(--space-6);border:var(--border-bold) solid var(--border-strong);border-radius:var(--radius-sm);background:var(--bg-elevated);text-decoration:none;color:var(--text);"
+          >
+            <div style="display:flex;flex-direction:column;gap:var(--space-2);min-width:0;">
+              {!post.data.unknownDate && (
+                <span class="nais-kicker" style="color:var(--text-muted);">
+                  {post.data.date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' })}
+                </span>
+              )}
+              <h2 style="font-family:var(--font-display);font-weight:400;font-size:var(--display-sm);line-height:0.95;letter-spacing:var(--tracking-display);margin:0;text-transform:uppercase;">
+                {post.data.title}
+              </h2>
+            </div>
+            <span style="font-family:var(--font-mono);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);flex-shrink:0;">
+              Bekijk →
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section data-theme="asphalt" style="background:var(--asphalt);border-top:var(--border-bold) solid var(--volt);padding:var(--space-8) var(--space-6);">
+    <div style="max-width:var(--container);margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-8);flex-wrap:wrap;">
+      <div style="max-width:48ch;">
+        <h2 style="font-family:var(--font-display);font-weight:400;font-size:var(--display-md);line-height:0.95;letter-spacing:var(--tracking-display);color:var(--bone);margin:0 0 var(--space-5);text-transform:uppercase;">
+          We bouwen<br/>een archief
+        </h2>
+        <p style="font-family:var(--font-sans);font-size:var(--text-base);color:var(--concrete-300);margin:0;line-height:1.6;">
+          Heb jij uitslagen, foto's of video's van oudere contests liggen? We zijn op zoek naar historisch materiaal om het NAIS archief op te bouwen. Elke bijdrage telt.
+        </p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+        <a
+          href="mailto:info@nais.nl"
+          style="display:inline-flex;align-items:center;gap:10px;font-family:var(--font-sans);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:0.05em;padding:12px 20px;background:var(--volt);color:var(--volt-ink);border-radius:var(--radius-pill);text-decoration:none;"
+        >
+          Mail ons →
+        </a>
+        <a
+          href="https://chat.whatsapp.com/HubB3iJi916J0AnmBOYMho?mode=gi_t"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="display:inline-flex;align-items:center;gap:10px;font-family:var(--font-sans);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:0.05em;padding:12px 20px;background:transparent;color:var(--bone);border:2px solid var(--asphalt-line);border-radius:var(--radius-sm);text-decoration:none;"
+        >
+          WhatsApp →
+        </a>
+      </div>
+    </div>
+  </section>
+
+</Layout>

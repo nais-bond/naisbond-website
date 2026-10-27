@@ -1,0 +1,34 @@
+/* ============================================================
+   NAIS — EFFECTS: radius, borders, shadow, motion
+   Clean and flat. Hairline borders, soft tinted shadows only on
+   lift, pill buttons, lightly rounded media.
+   ============================================================ */
+
+:root {
+  /* Radius — minimal. Cards are squared boxes. --------------- */
+  --radius-none: 0px;
+  --radius-xs:   2px;
+  --radius-sm:   4px;     /* cards, media */
+  --radius-md:   10px;
+  --radius-pill: 999px;   /* tags / pills only */
+
+  /* Borders — confident, structural ------------------------- */
+  --border-hair:  1px;
+  --border-bold:  1px;
+  --border-brut:  1px;
+
+  /* Shadow — low, hard-edged. No soft glows. ---------------- */
+  --shadow-sm:  0 1px 2px 0 rgba(17, 17, 17, 0.06);
+  --shadow-md:  0 4px 12px -4px rgba(17, 17, 17, 0.14);
+  --shadow-color: rgba(17, 17, 17, 0.28);
+  --shadow-block: 0 18px 36px -18px var(--shadow-color);   /* lift on hover */
+  --shadow-block-volt: var(--shadow-block);
+
+  /* Motion — quick, mechanical, no bounce ------------------- */
+  --ease-out:   cubic-bezier(0.2, 0.7, 0.2, 1); /* @kind other */
+  --ease-snap:  cubic-bezier(0.4, 0, 0, 1);      /* @kind other */
+  --dur-fast:   120ms; /* @kind other */
+  --dur-base:   200ms; /* @kind other */
+  --dur-slow:   360ms; /* @kind other */
+
+}

@@ -1,0 +1,73 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { LessenList } from '../components/LessenList.jsx';
+
+const posts = await getCollection('lessen');
+const schools = posts
+  .filter(p => !p.data.draft)
+  .map(p => ({
+    id: p.id,
+    title: p.data.title,
+    cities: p.data.cities,
+    location: p.data.location,
+    image: p.data.image ?? null,
+    schedule: p.data.schedule,
+    enroll: p.data.enroll,
+    categories: p.data.categories ?? [],
+  }));
+---
+
+<Layout title="Lessen - NAIS" active="Lessen">
+
+  {/* ── HERO ── */}
+  <section
+    data-theme="asphalt"
+    style="background:var(--asphalt);color:var(--bone);padding:var(--space-8) var(--space-6) var(--space-7);position:relative;overflow:hidden;"
+  >
+    <div style="max-width:var(--container);margin:0 auto;position:relative;z-index:1;">
+      <span class="nais-kicker nais-accent nais-eyebrow-block">Skate schools</span>
+      <h1 style="font-family:var(--font-display);font-weight:400;font-size:var(--display-xl);line-height:0.9;letter-spacing:var(--tracking-display);color:var(--bone);margin:0 0 var(--space-5);max-width:18ch;">
+        Leer<br/>Skaten
+      </h1>
+      <p style="font-family:var(--font-sans);font-size:var(--text-base);color:var(--concrete-300);max-width:48ch;line-height:1.55;margin:0;">
+        Verschillende organisaties bieden groepslessen in heel Nederland
+      </p>
+    </div>
+  </section>
+
+  {/* ── SCHOOL GRID ── */}
+  <section class="nais-section">
+    <div class="nais-container">
+      <LessenList schools={schools} client:load />
+    </div>
+  </section>
+
+  {/* ── CTA STRIP ── */}
+  <section
+    data-theme="asphalt"
+    style="background:var(--asphalt);border-top:1px solid var(--asphalt-line);padding:var(--space-8) var(--space-6);"
+  >
+    <div
+      style="max-width:var(--container);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:var(--space-6);flex-wrap:wrap;"
+    >
+      <div>
+        <h2 style="font-family:var(--font-display);font-weight:400;font-size:var(--display-md);line-height:0.95;letter-spacing:var(--tracking-display);color:var(--bone);margin:0;text-transform:uppercase;">
+          Geen les<br/>in jouw buurt?
+        </h2>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-3);align-items:flex-start;">
+        <p style="font-family:var(--font-sans);font-size:var(--text-sm);color:var(--concrete-300);margin:0;max-width:36ch;line-height:1.55;">
+          Ken je een skate school die hier nog niet staat? Laat het ons weten, we helpen je aansluiten bij het NAIS netwerk.
+        </p>
+        <a
+          href="mailto:info@nais.nl"
+          style="display:inline-flex;align-items:center;gap:var(--space-2);font-family:var(--font-sans);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;padding:10px 20px;background:var(--volt);color:var(--volt-ink);border-radius:var(--radius-pill);text-decoration:none;"
+        >
+          Neem contact op →
+        </a>
+      </div>
+    </div>
+  </section>
+
+</Layout>

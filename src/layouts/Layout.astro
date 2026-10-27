@@ -1,0 +1,116 @@
+---
+import '../styles/global.css'
+import { SiteHeader } from '../components/nais/SiteHeader.jsx'
+import { getCollection } from 'astro:content';
+
+const {
+  title = 'NAIS bond',
+  active,
+  description = 'De NAIS vertegenwoordigt alle Nederlandse aggressive inline skaters. Kalender, lessen, uitslagen en skaters.',
+  image,
+  type = 'website',
+} = Astro.props;
+
+// Absolute URLs for canonical + social cards. Falls back to the production domain
+// until `site` is set in astro.config.mjs.
+const SITE = (Astro.site?.origin ?? 'https://naisbond.nl').replace(/\/$/, '');
+const canonical = new URL(Astro.url.pathname, SITE).href;
+const ogImage = image ? new URL(image, SITE).href : `${SITE}/og-default.jpg`;
+
+const allEvents = await getCollection('calendar');
+const contestEvents = allEvents
+  .filter(e => !e.data.draft && e.data.tags?.some(t => t === 'Contest') && e.data.date.getFullYear() >= 2026)
+  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime())
+  .slice(0, 6);
+
+const FOOTER_COLS = [
+  { h: "Scene", links: [{ label: "Kalender", href: "/kalender" }, { label: "Lessen", href: "/lessen" }, { label: "Uitslagen", href: "/uitslagen" }, { label: "Skaters", href: "/skaters" }, { label: "Media", href: "/media" }, { label: "Reglementen", href: "/reglementen" }, { label: "Over de bond", href: "/over" }, { label: "Contact", href: "/contact" }] },
+  { h: "Contests", links: [...contestEvents.map(e => ({ label: e.data.title, href: `/kalender/${e.id}` }))] },
+  { h: "Volg", links: [{ label: "Instagram", href: "https://instagram.com/naisbond" }] },
+];
+---
+
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:site_name" content="NAIS bond" />
+    <meta property="og:locale" content="nl_NL" />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#131312" />
+    <script is:inline>
+      (function() {
+        try {
+          const s = localStorage.getItem('nais-theme');
+          if (s === 'dark') { document.documentElement.classList.add('dark'); return; }
+          if (s === 'light') { document.documentElement.classList.remove('dark'); return; }
+        } catch(e) {}
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+    <slot name="head" />
+  </head>
+  <body style="background: var(--bg); color: var(--text); margin: 0;">
+    <a href="#main" class="nais-skip">Ga naar inhoud</a>
+    <SiteHeader active={active} client:load />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <footer data-theme="asphalt" style="background:var(--asphalt);color:var(--bone);padding:var(--space-9) var(--space-6) var(--space-6);">
+      <div class="nais-container">
+        <div class="nais-footer-grid">
+          <div>
+            <img src="/logos/nais-logo-bone.svg" alt="NAIS" style="height:48px;margin-bottom:var(--space-4);" />
+            <p style="font-family:var(--font-sans);color:var(--concrete-300);max-width:30ch;margin:0;line-height:1.5;">
+              De NAIS vertegenwoordigt alle Nederlandse agressieve inline skaters.
+            </p>
+          </div>
+          {FOOTER_COLS.map(col => (
+            <div>
+              <span class="nais-kicker nais-accent">{col.h}</span>
+              <div style="display:flex;flex-direction:column;gap:8px;margin-top:var(--space-4);">
+                {col.links.map(l => (
+                  <a href={l.href} class="nais-footer-link">{l.label}</a>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:var(--space-8);padding-top:var(--space-5);border-top:var(--border-hair) solid var(--asphalt-line);flex-wrap:wrap;gap:var(--space-3);">
+          <span class="nais-kicker" style="color:var(--concrete-400);">© 2026 NAIS · Nederlandse Aggressive Inline Skating Bond</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .nais-footer-link { font-family: var(--font-sans); font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; opacity: 0.82; width: fit-content; border-bottom: 2px solid transparent; transition: opacity var(--dur-fast) var(--ease-snap), border-color var(--dur-fast) var(--ease-snap); }
+  .nais-footer-link:hover { opacity: 1; border-bottom-color: var(--volt); }
+  .nais-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: var(--space-6);
+  }
+  @media (max-width: 700px) {
+    .nais-footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .nais-footer-grid > :first-child {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

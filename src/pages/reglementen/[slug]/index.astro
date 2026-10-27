@@ -1,0 +1,18 @@
+---
+// Always shows the newest version, so links to /reglementen/<slug> stay current.
+import Layout from '../../../layouts/Layout.astro';
+import ReglementView from '../../../components/ReglementView.astro';
+import { getReglementen } from '../../../lib/reglementen';
+
+export async function getStaticPaths() {
+  const grouped = await getReglementen();
+  return [...grouped].map(([slug, versions]) => ({ params: { slug }, props: { versions } }));
+}
+
+const { versions } = Astro.props;
+const entry = versions[0];
+---
+
+<Layout title={`Reglement ${entry.data.shortTitle} - NAIS`} active="">
+  <ReglementView entry={entry} versions={versions} />
+</Layout>

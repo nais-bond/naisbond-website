@@ -1,0 +1,57 @@
+/* ============================================================
+   NAIS — TYPE TOKENS
+   Display: Anton (ultra-condensed sport-poster caps)
+   Text/UI: Archivo (grotesque workhorse)
+   Labels:  Archivo, tabular figures
+   ============================================================ */
+
+:root {
+  --font-display: "Anton", "Archivo Variable", Impact, system-ui, sans-serif;
+  --font-sans:    "Archivo Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:    "Archivo Variable", system-ui, sans-serif;   /* labels + numbers: sans, tabular */
+
+  /* Display scale — condensed, tight, loud ------------------- */
+  /* Fluid: scales with the viewport so mobile is not shouted at and
+     desktop stays confident. Values are min -> max. */
+  --display-2xl: clamp(3rem, 1.5rem + 5vw, 5.5rem);        /* 48 -> 88px  hero blowout   */
+  --display-xl:  clamp(2.5rem, 1.4rem + 3.6vw, 4rem);      /* 40 -> 64px  page titles    */
+  --display-lg:  clamp(1.875rem, 1.3rem + 2vw, 2.75rem);   /* 30 -> 44px  section heads  */
+  --display-md:  clamp(1.5rem, 1.2rem + 1vw, 2rem);        /* 24 -> 32px                 */
+  --display-sm:  clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);   /* 20 -> 24px                 */
+
+  /* Article / long-form headings (event, media, reglement bodies) */
+  --prose-h1:    clamp(1.5rem, 1.25rem + 0.8vw, 1.875rem); /* 24 -> 30px */
+  --prose-h2:    clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);  /* 20 -> 24px */
+  --prose-h3:    1.125rem;                                 /* 18px, sans bold */
+
+  /* Text scale ----------------------------------------------- */
+  --text-xl:  1.5rem;    /* 24px lead     */
+  --text-lg:  1.25rem;   /* 20px          */
+  --text-md:  1.0625rem; /* 17px body     */
+  --text-sm:  0.9375rem; /* 15px          */
+  --text-xs:  0.8125rem; /* 13px          */
+
+  /* Mono / label scale --------------------------------------- */
+  --label-md: 0.8125rem;  /* 13px */
+  --label-sm: 0.6875rem;  /* 11px tags */
+
+  /* Weights --------------------------------------------------- */
+  --weight-regular: 400;
+  --weight-medium:  500;
+  --weight-semibold:600;
+  --weight-bold:    700;
+  --weight-black:   900;
+
+  /* Line heights --------------------------------------------- */
+  --leading-tight:  0.92;  /* display blocks   */
+  --leading-snug:   1.12;
+  --leading-normal: 1.5;
+  --leading-relaxed:1.65;
+
+  /* Tracking ------------------------------------------------- */
+  --tracking-display: -0.01em;
+  --tracking-tight:  -0.01em;
+  --tracking-normal:  0em;
+  --tracking-wide:    0.04em;
+  --tracking-label:   0.08em;  /* uppercase labels */
+}

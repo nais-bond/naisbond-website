@@ -1,0 +1,158 @@
+[
+  {
+    "id": "academy51",
+    "title": "ACADEMY51",
+    "cities": ["Eindhoven"],
+    "location": "Area 51, Eindhoven",
+    "image": null,
+    "schedule": [
+      { "day": "Woensdag", "times": ["16:00", "17:30", "18:45"] }
+    ],
+    "enroll": "https://www.area51eindhoven.nl/academy-51/#academy",
+    "categories": ["les", "Groepslessen voor volwassenen"],
+    "draft": false
+  },
+  {
+    "id": "world-skate-center",
+    "title": "WORLD SKATE CENTER",
+    "cities": ["Den Bosch"],
+    "location": "Den Bosch, WSC skatepark",
+    "image": null,
+    "schedule": [
+      { "day": "Dinsdag", "times": ["17:30", "18:30", "19:30"] }
+    ],
+    "enroll": "https://worldskatecenter.com/skateschool/inline-skatelessen/",
+    "categories": ["les", "Groepslessen voor kids"],
+    "draft": false
+  },
+  {
+    "id": "waalhalla",
+    "title": "WAALHALLA",
+    "cities": ["Nijmegen"],
+    "location": "Waalhalla skatepark, Nijmegen",
+    "image": null,
+    "schedule": [
+      { "day": "Donderdag", "times": ["19:00"] }
+    ],
+    "enroll": "https://waalhalla-centrum.nl/home/workshops/lessen/inline-skaten/",
+    "categories": ["les", "Groepslessen voor kids"],
+    "draft": false
+  },
+  {
+    "id": "this-is-soul-utrecht-griftpark",
+    "title": "THIS IS SOUL ACADEMY",
+    "cities": ["Utrecht"],
+    "location": "Utrecht, Griftpark",
+    "image": null,
+    "schedule": [
+      { "day": "Maandag", "times": ["18:00"] }
+    ],
+    "enroll": "https://www.thisissoul.com/products/utrecht-griftpark-inline-skate-lessons",
+    "categories": ["les", "Groepslessen voor kids"],
+    "draft": false
+  },
+  {
+    "id": "this-is-soul-amsterdam-zeeburgereiland",
+    "title": "THIS IS SOUL ACADEMY",
+    "cities": ["Amsterdam"],
+    "location": "Amsterdam, Zeeburgereiland",
+    "image": null,
+    "schedule": [
+      { "day": "Woensdag", "times": ["17:00"] }
+    ],
+    "enroll": "https://www.thisissoul.com/products/amsterdam-zeeburger-eiland-inline-skate-lessons",
+    "categories": ["les", "Groepslessen voor kids"],
+    "draft": false
+  },
+  {
+    "id": "this-is-soul-amsterdam-olympiaplein",
+    "title": "THIS IS SOUL ACADEMY",
+    "cities": ["Amsterdam"],
+    "location": "Amsterdam, Olympiaplein",
+    "image": null,
+    "schedule": [
+      { "day": "Vrijdag", "times": ["16:00"] }
+    ],
+    "enroll": "https://www.thisissoul.com/products/amsterdam-olympiaplein-inline-skate-lessons",
+    "categories": ["les", "Groepslessen voor kids"],
+    "draft": false
+  },
+  {
+    "id": "this-is-soul-amsterdam-house-of-urban-sports",
+    "title": "THIS IS SOUL ACADEMY",
+    "cities": ["Amsterdam"],
+    "location": "Amsterdam, House of Urban Sports",
+    "image": null,
+    "schedule": [
+      { "day": "Donderdag", "times": ["17:00"] }
+    ],
+    "enroll": "https://www.thisissoul.com/products/amsterdam-house-of-urban-sports-skate-lessons",
+    "categories": ["les", "Groepslessen voor kids"],
+    "draft": false
+  },
+  {
+    "id": "this-is-soul-amsterdam-beginners-volwassenen",
+    "title": "THIS IS SOUL ACADEMY",
+    "cities": ["Amsterdam"],
+    "location": "Amsterdam, Vondelpark",
+    "image": null,
+    "schedule": [
+      { "day": "Zaterdag", "times": ["12:00"] }
+    ],
+    "enroll": "https://www.thisissoul.com/products/cursus-veilig-skaten-voor-volwassenen-vondelpark",
+    "categories": ["les", "Groepslessen voor volwassenen"],
+    "draft": false
+  },
+  {
+    "id": "niels-on-wheels-kids",
+    "title": "NIELS ON WHEELS",
+    "cities": ["Tilburg"],
+    "location": "Ladybird Skatepark, Tilburg",
+    "image": null,
+    "schedule": [
+      { "day": "Donderdag", "times": ["18:00"] }
+    ],
+    "enroll": "https://www.nielsonwheels.eu/lessen/",
+    "categories": ["les", "Groepslessen voor kids"],
+    "draft": false
+  },
+  {
+    "id": "niels-on-wheels-volwassenen",
+    "title": "NIELS ON WHEELS",
+    "cities": ["Tilburg"],
+    "location": "Skateparken in Tilburg e.o.",
+    "image": null,
+    "schedule": [
+      { "day": "Maandag (om de week)", "times": ["19:30"] }
+    ],
+    "enroll": "https://www.nielsonwheels.eu/lessen/",
+    "categories": ["les", "Groepslessen voor volwassenen"],
+    "draft": false
+  },
+  {
+    "id": "skateland-rolschaatsles-kids",
+    "title": "SKATELAND",
+    "cities": ["Rotterdam"],
+    "location": "Skateland, Rotterdam (gemixte les: rolschaatsers en inliners)",
+    "image": null,
+    "schedule": [
+      { "day": "Maandag", "times": ["16:45", "18:00"] }
+    ],
+    "enroll": "https://skateland.nl/lessen/rolschaatsles/",
+    "categories": ["les", "Groepslessen voor kids"],
+    "draft": false
+  },
+  {
+    "id": "skateland-rolschaatsles-volwassenen",
+    "title": "SKATELAND",
+    "cities": ["Rotterdam"],
+    "location": "Skateland, Rotterdam (gemixte les: rolschaatsers en inliners)",
+    "image": null,
+    "schedule": [
+      { "day": "Maandag", "times": ["19:30"] }
+    ],
+    "enroll": "https://skateland.nl/lessen/rolschaatsles/",
+    "categories": ["les", "Groepslessen voor volwassenen"],
+    "draft": false
+  }
+]

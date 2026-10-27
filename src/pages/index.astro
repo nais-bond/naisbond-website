@@ -1,0 +1,175 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { HomepageAgenda } from '../components/HomepageAgenda.jsx';
+import { HomepageLessen } from '../components/HomepageLessen.jsx';
+import { NextMatch } from '../components/nais/NextMatch.jsx';
+import heroImg from '../assets/images/AF_Visuals-Jaro_motiontrail.jpg';
+import nkImg from '../assets/images/events/nk-2025-park.jpg';
+
+// Fetch calendar, sort desc, take 6 for agenda grid
+const allEvents = await getCollection('calendar');
+const sorted = allEvents
+  .filter(e => !e.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Next upcoming event for the contest bar (today counts as upcoming)
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+const upcoming = sorted.filter(e => e.data.date >= today).reverse(); // soonest first
+const past = sorted.filter(e => e.data.date < today);               // most recent first
+const nextEvent = upcoming[0];
+
+// Agenda grid: the next contests first (featured = soonest), then the latest past ones
+// A featured ('uitgelicht') contest takes the large first slot; otherwise the soonest one does.
+const isFeatured = e => e.data.tags.some(t => t.toLowerCase() === 'uitgelicht');
+const agendaPool = [...upcoming.slice(0, 3), ...past].slice(0, 6);
+const featuredEvent = agendaPool.find(isFeatured);
+const agendaOrdered = featuredEvent ? [featuredEvent, ...agendaPool.filter(e => e !== featuredEvent)] : agendaPool;
+const agendaEvents = agendaOrdered.map(e => ({
+  image: typeof e.data.image === 'string' ? e.data.image : e.data.image?.src || '',
+  title: e.data.title,
+  date: e.data.dateLabel ?? e.data.date.toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: '2-digit' }).replace(/\//g, '.'),
+  city: e.data.tags.find(t => !['Contest','Demo','uitgelicht','uitgelicht'].includes(t)) ?? '',
+  tags: e.data.tags.filter(t => t.toLowerCase() !== 'uitgelicht').slice(0, 3),
+  href: `/kalender/${e.id}`,
+  uitgelicht: e.data.tags.map(t=>t.toLowerCase()).includes('uitgelicht'),
+}));
+
+const nextTitle = nextEvent?.data.title ?? 'Vondelcup 2026';
+const nextDate = nextEvent
+  ? (nextEvent.data.dateLabel ?? nextEvent.data.date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' }))
+  : '4 september 2026';
+const nextVenue = nextEvent?.data.tags.find(t => !['Contest','Demo','uitgelicht'].includes(t)) ?? '';
+const nextHref = nextEvent ? `/kalender/${nextEvent.id}` : '/kalender';
+
+// Latest published result, with the photo of its matching calendar event (e.g. soeperbowl-2026 -> 2026-06-05-soeperbowl)
+const results = (await getCollection('uitslagen'))
+  .filter(r => !r.data.unknownDate)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const latestResult = results[0];
+const resultWords = latestResult?.id.split('-') ?? [];
+const resultYear = resultWords.at(-1);
+const resultName = resultWords.slice(0, -1).join('-');
+const resultEvent = allEvents.find(e => e.id.startsWith(`${resultYear}-`) && e.id.endsWith(`-${resultName}`));
+const resultImg = resultEvent?.data.image ?? nkImg;
+const resultDate = latestResult?.data.date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
+
+// Lessen data — all schools, random 4 picked client-side
+import lessenData from '../content/lessen.json';
+const SCHOOLS = lessenData
+  .filter(s => !s.draft)
+  .map(s => ({
+    name: s.title,
+    city: s.cities.slice(0, 2).join(', '),
+    day: s.schedule[0]?.day ?? '',
+    time: s.schedule[0]?.times.join(' / ') ?? '',
+    level: s.categories.find(c => c !== 'les') ?? s.categories[0] ?? '',
+    href: '/lessen',
+  }));
+
+---
+
+<Layout title="NAIS - Nederlandse Aggressive Inline Skating Bond" active="">
+
+  {/* ── HERO ────────────────────────────────────────────────── */}
+  <section
+    data-theme="asphalt"
+    style="position:relative;background:var(--asphalt);color:var(--bone);overflow:hidden;min-height:calc(100dvh - 68px);display:flex;flex-direction:column;justify-content:flex-end;"
+  >
+    <img
+      src={heroImg.src}
+      alt=""
+      width={heroImg.width}
+      height={heroImg.height}
+      fetchpriority="high"
+      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;"
+    />
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(17,17,17,.25) 0%,rgba(17,17,17,0) 35%,rgba(17,17,17,.82) 100%);"></div>
+
+    <div class="nais-hero-in" style="position:relative;width:100%;max-width:var(--container-wide);margin:0 auto;padding:var(--space-9) var(--space-6) var(--space-7);">
+      <span class="nais-kicker" style="color:var(--bone);">Aggressive inline skating</span>
+      <h1 style="font-family:var(--font-display);font-weight:400;font-size:clamp(56px,10vw,152px);line-height:0.92;letter-spacing:-0.01em;margin:var(--space-4) 0 0;max-width:12ch;color:var(--bone);text-transform:uppercase;">
+        NAIS Bond
+      </h1>
+      <p style="font-family:var(--font-sans);font-size:var(--text-lg);color:var(--bone);max-width:42ch;margin:var(--space-5) 0 0;line-height:1.5;">
+        De thuisbasis van aggressive inline skating in Nederland. Events, contests, lessen en uitslagen.
+      </p>
+      <div style="display:flex;gap:var(--space-3);margin-top:var(--space-6);flex-wrap:wrap;">
+        <a class="nais-btn" href="#agenda" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-sans);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:0.05em;padding:14px 24px;background:var(--bone);color:var(--asphalt);border:1px solid var(--bone);text-decoration:none;">
+          Bekijk de kalender
+        </a>
+        <a class="nais-btn" href="/lessen" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-sans);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:0.05em;padding:14px 24px;background:transparent;color:var(--bone);border:1px solid var(--bone);text-decoration:none;">
+          Vind een les
+        </a>
+      </div>
+    </div>
+
+    <NextMatch
+      eventName={nextTitle}
+      date={nextDate}
+      venue={nextVenue}
+      href={nextHref}
+      cta="Bekijk"
+      style={{ position: 'relative', background: 'rgba(17,17,17,.55)', backdropFilter: 'blur(10px)' }}
+      client:load
+    />
+  </section>
+
+  {/* ── AGENDA (React island) ────────────────────── */}
+  <HomepageAgenda events={agendaEvents} client:load />
+
+  {/* ── LESSON STRIP ────────────────────────────────────────── */}
+  <section id="lessen" data-theme="asphalt" style="background:var(--asphalt);color:var(--bone);padding:var(--space-9) var(--space-6);">
+    <div class="nais-container">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:var(--space-6);flex-wrap:wrap;margin-bottom:var(--space-7);">
+        <div>
+          <h2 style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;font-size:var(--display-lg);line-height:var(--leading-tight);letter-spacing:var(--tracking-display);color:var(--bone);margin:0;">Leer skaten</h2>
+        </div>
+        <a class="nais-btn" href="/lessen" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-sans);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:0.04em;padding:10px 18px;background:var(--volt);color:var(--volt-ink);border:1px solid var(--volt);border-radius:var(--radius-pill);text-decoration:none;">
+          Vind een les →
+        </a>
+      </div>
+      <HomepageLessen schools={SCHOOLS} client:load />
+    </div>
+  </section>
+
+  {/* ── UITSLAGEN TEASER (latest published result) ─────────── */}
+  {latestResult && (
+    <section style="background:var(--bg);padding:var(--space-9) var(--space-6);">
+      <div class="nais-result-grid">
+        <div>
+          <h2 style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;font-size:var(--display-lg);line-height:0.9;letter-spacing:var(--tracking-display);margin:0 0 var(--space-4);color:var(--text);">{latestResult.data.title}: de uitslag</h2>
+          <p style="font-family:var(--font-sans);font-size:var(--text-lg);color:var(--text-muted);max-width:44ch;margin:0 0 var(--space-5);line-height:1.5;">
+            Alle scores per categorie, van {resultDate}.
+          </p>
+          <a class="nais-btn" href={`/uitslagen/${latestResult.id}`} style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-sans);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:0.04em;padding:10px 18px;background:var(--text);color:var(--bg);border:1px solid var(--text);border-radius:var(--radius-pill);text-decoration:none;">
+            Bekijk uitslag →
+          </a>
+        </div>
+        <div style="position:relative;aspect-ratio:4/3;border-radius:var(--radius-md);overflow:hidden;">
+          <img src={resultImg.src} alt={latestResult.data.title} loading="lazy" style="width:100%;height:100%;object-fit:cover;" />
+        </div>
+      </div>
+    </section>
+  )}
+
+
+  {/* ── WORD LID ────────────────────────────────────────────── */}
+  <section data-theme="asphalt" style="background:var(--asphalt);color:var(--bone);padding:var(--space-9) var(--space-6);border-top:1px solid var(--asphalt-line);">
+    <div class="nais-container" style="display:flex;align-items:flex-end;justify-content:space-between;gap:var(--space-6);flex-wrap:wrap;">
+      <h2 style="font-family:var(--font-display);font-weight:400;font-size:var(--display-xl);line-height:0.95;text-transform:uppercase;margin:0;max-width:16ch;color:var(--bone);">Want iedereen verdient een club</h2>
+      <a class="nais-btn" href="/word-lid" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-sans);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:0.05em;padding:14px 24px;background:var(--bone);color:var(--asphalt);border:1px solid var(--bone);text-decoration:none;">Word lid</a>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .nais-result-grid { max-width: var(--container); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-7); align-items: center; }
+  @media (max-width: 700px) { .nais-result-grid { grid-template-columns: 1fr; gap: var(--space-5); } }
+  @keyframes nais-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+</style>

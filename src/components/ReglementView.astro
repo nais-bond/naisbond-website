@@ -1,0 +1,187 @@
+---
+import { render } from 'astro:content';
+import { formatReglementDate, type Reglement } from '../lib/reglementen';
+
+interface Props {
+  entry: Reglement;
+  versions: Reglement[]; // newest first
+}
+
+const { entry, versions } = Astro.props;
+const { Content, headings } = await render(entry);
+
+const slug = entry.data.reglement;
+const latest = versions[0];
+const isLatest = latest.id === entry.id;
+const toc = headings.filter(h => h.depth === 2);
+---
+
+{/* ── HERO ── */}
+<section data-theme="asphalt" style="background:var(--asphalt);padding:var(--space-10) var(--space-6) var(--space-8);">
+  <div class="nais-container">
+    <div style="display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--concrete-400);margin-bottom:var(--space-5);">
+      <a href="/reglementen" style="color:var(--concrete-300);text-decoration:none;opacity:0.7;">Reglementen</a>
+      <span>/</span>
+      <span style="color:var(--bone);opacity:0.6;">{entry.data.shortTitle}</span>
+    </div>
+    <span class="nais-kicker nais-accent nais-eyebrow-block">Officieel reglement</span>
+    <h1 style="font-family:var(--font-display);font-weight:400;font-size:clamp(32px,4.4vw,56px);line-height:0.92;letter-spacing:var(--tracking-display);color:var(--bone);margin:0 0 var(--space-5);max-width:22ch;">
+      {entry.data.title}
+    </h1>
+    <div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:center;">
+      <span style="display:inline-flex;align-items:center;padding:4px 12px;font-family:var(--font-mono);font-size:12px;font-weight:700;letter-spacing:0.06em;border:1px solid var(--volt);border-radius:var(--radius-pill);color:var(--accent-text);">
+        v{entry.data.version}
+      </span>
+      <span class="nais-kicker" style="color:var(--concrete-300);">{formatReglementDate(entry.data.date)}</span>
+      {isLatest && <span class="nais-kicker" style="color:var(--concrete-300);">Huidige versie</span>}
+    </div>
+  </div>
+</section>
+
+{!isLatest && (
+  <div style="background:var(--volt);color:var(--volt-ink);padding:var(--space-4) var(--space-6);">
+    <div style="max-width:var(--container);margin:0 auto;font-family:var(--font-sans);font-weight:600;font-size:var(--text-sm);">
+      Je bekijkt een oudere versie (v{entry.data.version}).{' '}
+      <a href={`/reglementen/${slug}`} style="color:var(--volt-ink);text-decoration:underline;">Bekijk de huidige versie v{latest.data.version} →</a>
+    </div>
+  </div>
+)}
+
+{/* ── BODY ── */}
+<section class="nais-section">
+  <div class="reglement-grid">
+    <article class="reglement-prose">
+      <Content />
+    </article>
+
+    <aside class="reglement-aside">
+      {toc.length > 0 && (
+        <nav style="border:var(--border-bold) solid var(--border-strong);border-radius:var(--radius-sm);background:var(--bg-elevated);padding:var(--space-5);">
+          <span class="nais-kicker" style="color:var(--text-muted);display:block;margin-bottom:var(--space-3);">Inhoud</span>
+          <ol style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
+            {toc.map(h => (
+              <li><a href={`#${h.slug}`} style="font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text);text-decoration:none;">{h.text}</a></li>
+            ))}
+          </ol>
+        </nav>
+      )}
+
+      <div style="border:var(--border-bold) solid var(--border-strong);border-radius:var(--radius-sm);background:var(--bg-elevated);padding:var(--space-5);">
+        <span class="nais-kicker" style="color:var(--text-muted);display:block;margin-bottom:var(--space-3);">Versies</span>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
+          {versions.map((v, i) => (
+            <li style="display:flex;justify-content:space-between;gap:var(--space-3);font-family:var(--font-mono);font-size:13px;">
+              {v.id === entry.id
+                ? <strong style="color:var(--text);">v{v.data.version}{i === 0 ? ' (huidig)' : ''}</strong>
+                : <a class="nais-accent" href={`/reglementen/${slug}/${v.data.version}`}>v{v.data.version}{i === 0 ? ' (huidig)' : ''}</a>}
+              <span style="color:var(--text-muted);">{v.data.date.toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric' })}</span>
+            </li>
+          ))}
+        </ul>
+        <p style="font-family:var(--font-sans);font-size:12px;color:var(--text-muted);margin:var(--space-3) 0 0;line-height:1.5;">
+          Vaste link naar deze versie:<br />
+          <a href={`/reglementen/${slug}/${entry.data.version}`} style="color:var(--text-muted);word-break:break-all;">/reglementen/{slug}/{entry.data.version}</a>
+        </p>
+      </div>
+
+      <p style="font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted);margin:0;line-height:1.5;">
+        Vragen over het reglement? Mail naar <a class="nais-accent" href="mailto:info@naisbond.nl">info@naisbond.nl</a>.
+      </p>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .reglement-grid {
+    max-width: var(--container);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: var(--space-8);
+    align-items: start;
+  }
+  .reglement-grid > * { min-width: 0; }
+  .reglement-aside {
+    position: sticky;
+    top: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    max-height: calc(100vh - 2 * var(--space-6));
+    overflow-y: auto;
+  }
+  @media (max-width: 860px) {
+    .reglement-grid { grid-template-columns: 1fr; }
+    .reglement-aside { position: static; max-height: none; order: -1; }
+  }
+</style>
+
+<style is:global>
+  .reglement-prose {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.65;
+    color: var(--text);
+    max-width: 75ch;
+  }
+  .reglement-prose h2,
+  .reglement-prose h3 { scroll-margin-top: var(--space-6); color: var(--text); }
+  .reglement-prose h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--prose-h2);
+    letter-spacing: var(--tracking-display);
+    line-height: 1;
+    margin: var(--space-7) 0 var(--space-3);
+  }
+  .reglement-prose h3 {
+    font-size: var(--prose-h3);
+    font-weight: 700;
+    margin: var(--space-6) 0 var(--space-3);
+  }
+  .reglement-prose p { margin: 0 0 var(--space-4); }
+  .reglement-prose ul, .reglement-prose ol { padding-left: var(--space-5); margin: 0 0 var(--space-4); }
+  .reglement-prose li { margin-bottom: var(--space-2); }
+  .reglement-prose li > ul { margin: var(--space-2) 0 0; }
+  .reglement-prose a { color: var(--accent-text); text-decoration: underline; }
+  .reglement-prose strong { font-weight: 700; }
+  .reglement-prose blockquote {
+    margin: 0 0 var(--space-5);
+    padding: var(--space-3) var(--space-4);
+    border-left: 2px solid var(--volt);
+    background: var(--bg-elevated);
+    color: var(--text-muted);
+  }
+  .reglement-prose blockquote p:last-child { margin: 0; }
+  .reglement-prose hr {
+    border: none;
+    border-top: var(--border-hair) solid var(--border);
+    margin: var(--space-7) 0 0;
+  }
+  .reglement-prose table {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+    margin: var(--space-4) 0 var(--space-5);
+  }
+  .reglement-prose th {
+    text-align: left;
+    padding: var(--space-2) var(--space-3);
+    border-bottom: var(--border-bold) solid var(--border-strong);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .reglement-prose td {
+    padding: var(--space-3);
+    border-bottom: var(--border-hair) solid var(--border);
+    vertical-align: top;
+  }
+  .reglement-prose td:first-child { white-space: nowrap; }
+  .reglement-prose tr:last-child td { border-bottom: none; }
+</style>

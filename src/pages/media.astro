@@ -1,0 +1,53 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { MediaView } from '../components/MediaView.jsx';
+
+const posts = await getCollection('media');
+const sorted = posts
+  .filter(p => !p.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+function ytThumb(youtubeUrl?: string): string | null {
+  if (!youtubeUrl) return null;
+  const m = youtubeUrl.match(/embed\/([^?&/]+)/);
+  return m ? `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg` : null;
+}
+
+const items = sorted.map(p => ({
+  href: `/media/${p.id}`,
+  title: p.data.title,
+  show: p.data.show,
+  description: p.data.description,
+  image: ytThumb(p.data.youtube) || (p.data.image?.startsWith('/images/') ? null : p.data.image) || null,
+  date: p.data.date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' }),
+}));
+---
+
+<Layout title="Media - NAIS" active="Media">
+
+  {/* ── HERO ── */}
+  <section
+    data-theme="asphalt"
+    style="background:var(--asphalt);color:var(--bone);padding:var(--space-8) var(--space-6) var(--space-7);position:relative;overflow:hidden;"
+  >
+    <div style="max-width:var(--container);margin:0 auto;position:relative;z-index:1;">
+      <span class="nais-kicker nais-accent nais-eyebrow-block">NAIS</span>
+      <h1 style="font-family:var(--font-display);font-weight:400;font-size:var(--display-xl);line-height:0.9;letter-spacing:var(--tracking-display);color:var(--bone);margin:0 0 var(--space-5);">
+        Media
+      </h1>
+      <p style="font-family:var(--font-sans);font-size:var(--text-base);color:var(--concrete-300);max-width:48ch;line-height:1.55;margin:0;">
+        Reportages, interviews en video's over inline skaten in Nederland.
+      </p>
+    </div>
+    <div style="position:absolute;right:-60px;top:0;bottom:0;width:320px;background:repeating-linear-gradient(135deg,transparent,transparent 18px,rgba(255,255,255,0.025) 18px,rgba(255,255,255,0.025) 20px);pointer-events:none;"></div>
+  </section>
+
+  {/* ── MEDIA GRID ── */}
+  <section class="nais-section">
+    <div class="nais-container">
+      <MediaView items={items} client:load />
+    </div>
+  </section>
+
+</Layout>

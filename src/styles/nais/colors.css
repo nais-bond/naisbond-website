@@ -1,0 +1,114 @@
+/* ============================================================
+   NAIS — COLOR TOKENS
+   Black and white. Ink, off-white, a neutral grey ramp.
+   Photography carries all the colour. LIVE red is the only hue.
+   ============================================================ */
+
+:root {
+  /* ---- Base palette ---------------------------------------- */
+  --asphalt:        #111111;  /* ink black — primary dark ground   */
+  --asphalt-raised: #1B1B1A;  /* raised surface on dark            */
+  --asphalt-line:   #2B2B29;  /* hairline on dark                  */
+
+  --bone:           #F6F6F4;  /* off-white: page ground in light, text on dark */
+  --bone-dim:       #ECECE8;  /* quiet surface on bone */
+  --bone-line:      #DDDDD8;  /* hairline on bone      */
+
+  /* Monochrome brand: no hue accent. "Volt" is the strong fill of the current
+     ground: ink on light pages, off-white on dark ones (buttons, tags, marks).
+     --volt-ink is the text that sits on it. Colour comes from photography. */
+  --volt:           var(--asphalt);
+  --volt-deep:      var(--concrete-700);   /* hover/press */
+  --volt-ink:       var(--bone);
+
+  --spark:          #E8281E;  /* hot orange-red — LIVE / urgent, very rarely */
+  --spark-deep:     #C81E14;
+
+  /* ---- Concrete neutral ramp (neutral) --------------- */
+  --concrete-50:    #F6F6F4;
+  --concrete-100:   #ECECE8;
+  --concrete-200:   #D9D9D4;
+  --concrete-300:   #B4B4AE;
+  --concrete-400:   #8A8A85;
+  --concrete-500:   #5E5E5A;
+  --concrete-600:   #444441;
+  --concrete-700:   #2F2F2D;
+  --concrete-800:   #1F1F1E;
+  --concrete-900:   #151514;
+
+  /* ---- Semantic — default (bone / light ground) ------------ */
+  --paper:          var(--bone);
+  --bg:             var(--paper);
+  --bg-elevated:    #FFFFFF;
+  --surface:        var(--bone-dim);
+  --surface-strong: var(--asphalt);
+  --text:           var(--asphalt);
+  --text-muted:     var(--concrete-500);
+  --text-faint:     var(--concrete-500);
+  --text-inverse:   var(--bone);
+  --accent-text:    var(--asphalt);   /* accent text: ink on light, off-white on dark */
+  --volt-bd:        var(--volt);      /* border on volt fills: same as fill (no outline) */
+  --nm-bg:          var(--asphalt);   /* NextMatch bar: black band */
+  --nm-fg:          var(--bone);
+  --nm-fg-muted:    var(--concrete-300);
+  --border:         var(--bone-line);
+  --border-strong:  rgba(17, 17, 17, 0.22);
+  --accent:         var(--volt);
+  --accent-hover:   var(--volt-deep);
+  --on-accent:      var(--volt-ink);
+  --live:           var(--spark);
+  --ring:           var(--asphalt);
+}
+
+/* ---- Dark mode: .dark class on <html> ----------------------- */
+/* Applied by SiteHeader JS (reads OS preference + localStorage) */
+.dark {
+  --volt:           var(--bone);
+  --volt-deep:      var(--concrete-200);
+  --volt-ink:       var(--asphalt);
+  --volt-bd:        var(--volt);
+  --shadow-color:   rgba(0, 0, 0, 0.5);
+  --accent-text:    var(--bone);
+  --nm-bg:          var(--asphalt);
+  --nm-fg:          var(--bone);
+  --nm-fg-muted:    var(--concrete-300);
+  --bg:             var(--asphalt);
+  --bg-elevated:    var(--asphalt-raised);
+  --surface:        var(--asphalt-raised);
+  --surface-strong: var(--bone);
+  --text:           var(--bone);
+  --text-muted:     var(--concrete-300);
+  --text-faint:     var(--concrete-400);
+  --text-inverse:   var(--asphalt);
+  --border:         var(--asphalt-line);
+  --border-strong:  rgba(246, 246, 244, 0.28);
+  --accent:         var(--volt);
+  --accent-hover:   var(--volt-deep);
+  --on-accent:      var(--volt-ink);
+  --ring:           var(--volt);
+}
+
+/* ---- Always-dark sections (design intent, not theme) --------- */
+/* Applied to individual elements like hero, footer, lesson strip. */
+[data-theme="asphalt"] {
+  --volt:           var(--bone);
+  --volt-deep:      var(--concrete-200);
+  --volt-ink:       var(--asphalt);
+  --volt-bd:        var(--volt);
+  --shadow-color:   rgba(0, 0, 0, 0.5);
+  --accent-text:    var(--bone);
+  --bg:             var(--asphalt);
+  --bg-elevated:    var(--asphalt-raised);
+  --surface:        var(--asphalt-raised);
+  --surface-strong: var(--bone);
+  --text:           var(--bone);
+  --text-muted:     var(--concrete-300);
+  --text-faint:     var(--concrete-400);
+  --text-inverse:   var(--asphalt);
+  --border:         var(--asphalt-line);
+  --border-strong:  rgba(246, 246, 244, 0.28);
+  --accent:         var(--volt);
+  --accent-hover:   var(--volt-deep);
+  --on-accent:      var(--volt-ink);
+  --ring:           var(--volt);
+}

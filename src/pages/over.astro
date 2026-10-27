@@ -1,0 +1,208 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { StatBlock } from '../components/nais/StatBlock.jsx';
+import { PersonCard } from '../components/nais/PersonCard.jsx';
+import { Timeline } from '../components/nais/Timeline.jsx';
+import heroImg from '../assets/images/gallery/1-d.wagner.jpeg';
+import img2 from '../assets/images/gallery/2-d.wagner.jpeg';
+import img6 from '../assets/images/gallery/6-d.wagner.jpeg';
+
+const stats = [
+  { value: '2+', label: 'Events per jaar', accent: false },
+  { value: '50+', label: 'Leden', accent: false },
+  { value: '2023', label: 'Opgericht', accent: false },
+];
+
+const team = [
+  { name: 'Bestuur NAIS', role: 'Bestuur', bio: 'Het NAIS-bestuur organiseert evenementen, vertegenwoordigt skaters bij overheidsinstanties en coördineert de bondszaken.' },
+];
+
+const timeline = [
+  { year: '2023', title: 'Oprichting NAIS', desc: 'De Nederlandse Aggressive Inline Skating Bond wordt opgericht om de sport in Nederland te organiseren en te vertegenwoordigen.' },
+  { year: '2025', title: 'Inschrijving NAIS', desc: 'De werkelijke inschrijving bij de notaris' },
+  { year: '2025', title: 'Eerste NK', desc: 'Het eerste officiële Nederlands Kampioenschap Aggressive Inline wordt gehouden.' },
+  { year: '2026', title: 'Nieuwe website', desc: 'Lancering van het nieuwe NAIS platform met kalender, uitslagen en lesoverzicht.' },
+  { year: '2026', title: 'Tweede NK', desc: 'Het tweede Nederlands Kampioenschap Aggressive Inline wordt gehouden.' },
+];
+---
+
+<Layout title="Over NAIS" active="Over">
+
+  {/* ── HERO ── */}
+  <section
+    data-theme="asphalt"
+    style="position:relative;min-height:520px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;background:var(--asphalt);"
+  >
+    <img
+      src={heroImg.src}
+      alt=""
+      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;opacity:0.55;filter:contrast(1.1) saturate(0.7);"
+    />
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(19,19,18,.1) 0%,rgba(19,19,18,.85) 100%);"></div>
+
+    <div style="position:relative;max-width:var(--container);margin:0 auto;width:100%;padding:0 var(--space-6) var(--space-10);">
+      <span class="nais-kicker nais-accent nais-eyebrow-block">Over NAIS</span>
+      <h1 style="font-family:var(--font-display);font-weight:400;font-size:clamp(40px,5.6vw,80px);line-height:0.9;letter-spacing:var(--tracking-display);color:var(--bone);margin:0 0 var(--space-5);max-width:20ch;">
+        Wij zijn<br/>NAIS
+      </h1>
+      <p style="font-family:var(--font-sans);font-size:var(--text-base);color:var(--concrete-200);max-width:52ch;line-height:1.6;margin:0;">
+        De Nederlandse Aggressive Inline Skating Bond vertegenwoordigt alle skaters in Nederland, van contests tot lessen, van park tot street.
+      </p>
+    </div>
+    <div style="position:relative;width:100%;height:8px;border-top:var(--border-hair) solid rgba(255,255,255,0.1);"></div>
+  </section>
+
+  {/* ── STATS STRIP ── */}
+  <section style="background:var(--bg);border-bottom:var(--border-bold) solid var(--border-strong);">
+    <div class="stats-grid">
+      {stats.map((s, i) => (
+        <StatBlock
+          value={s.value}
+          label={s.label}
+          accent={s.accent}
+          class={i < stats.length - 1 ? 'stat-divider' : ''}
+          style={{
+            borderTop: `1px solid ${s.accent ? 'var(--volt)' : 'transparent'}`,
+            background: 'var(--bg)',
+          }}
+        />
+      ))}
+    </div>
+  </section>
+
+  {/* ── MISSIE ── */}
+  <section style="background:var(--bg);padding:var(--space-10) var(--space-6);">
+    <div class="over-two-col">
+      <div>
+        <h2 style="font-family:var(--font-display);font-weight:400;font-size:var(--display-lg);line-height:0.9;letter-spacing:var(--tracking-display);margin:0 0 var(--space-6);text-transform:uppercase;">
+          Aggressive<br/>Inline<br/>voor iedereen
+        </h2>
+        <p style="font-family:var(--font-sans);font-size:var(--text-base);color:var(--text-muted);line-height:1.65;margin:0 0 var(--space-4);">
+          Deze sport is niet alleen maar een sportm er zit een sterke cultuur achter, waarin veel mensen levenslange vriendschappen, creatieve outlets en simpelweg een plek in de wereld door hebben gevonden.
+        </p>
+        <p style="font-family:var(--font-sans);font-size:var(--text-base);color:var(--text-muted);line-height:1.65;margin:0 0 var(--space-7);">
+          Omdat het een kleine community is, gaat er weinig geld om in de sport, maar dat weerhoudt ons er niet van om geweldige evenementen te organiseren, video's en andere media te creëren en simpelweg met elkaar te genieten van de sport die we allemaal zo leuk vinden.
+        </p>
+        <span style="display:inline-flex;align-items:center;padding:6px 14px;font-family:var(--font-mono);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;border:1px solid var(--volt);border-radius:var(--radius-pill);color:var(--accent-text);">
+          Opgericht 2023
+        </span>
+      </div>
+      <div style="border-radius:var(--radius-sm);overflow:hidden;aspect-ratio:4/5;">
+        <img src={img2.src} alt="Inline skaten Nederland" style="width:100%;height:100%;object-fit:cover;display:block;" />
+      </div>
+    </div>
+  </section>
+
+  {/* ── EVENTS SECTION ── */}
+  <section style="background:var(--bg);border-top:var(--border-hair) solid var(--border);padding:var(--space-10) var(--space-6);">
+    <div class="over-two-col over-two-col--reverse">
+      <div style="border-radius:var(--radius-sm);overflow:hidden;aspect-ratio:4/3;">
+        <img src={img6.src} alt="NAIS events" style="width:100%;height:100%;object-fit:cover;display:block;" />
+      </div>
+      <div>
+        <h2 style="font-family:var(--font-display);font-weight:400;font-size:var(--display-lg);line-height:0.9;letter-spacing:var(--tracking-display);margin:0 0 var(--space-6);text-transform:uppercase;">
+          Wedstrijden<br/>& demos
+        </h2>
+        <p style="font-family:var(--font-sans);font-size:var(--text-base);color:var(--text-muted);line-height:1.65;margin:0 0 var(--space-6);">
+          Van het Nederlands Kampioenschap tot lokale demo's, NAIS organiseert en ondersteunt events door heel Nederland. Elk event is een kans om samen te skaten, te leren en de community te laten groeien.
+        </p>
+        <a
+          href="/kalender"
+          style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-sans);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.04em;padding:10px 20px;background:var(--volt);color:var(--volt-ink);border-radius:var(--radius-pill);text-decoration:none;"
+        >
+          Bekijk kalender →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* ── TEAM ── */}
+  <section
+    data-theme="asphalt"
+    style="background:var(--asphalt);padding:var(--space-10) var(--space-6);"
+  >
+    <div class="nais-container">
+      <div style="margin-bottom:var(--space-8);">
+        <h2 style="font-family:var(--font-display);font-weight:400;font-size:var(--display-lg);line-height:0.9;letter-spacing:var(--tracking-display);color:var(--bone);margin:0;text-transform:uppercase;">
+          Het team
+        </h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--space-5);">
+        {team.map(p => (
+          <PersonCard name={p.name} role={p.role} bio={p.bio} />
+        ))}
+      </div>
+      <p style="font-family:var(--font-sans);font-size:var(--text-sm);color:var(--concrete-400);margin:var(--space-7) 0 0;">
+        Interesse in het bestuur? Neem <a href="/contact" style="color:var(--accent-text);text-decoration:none;">contact</a> met ons op.
+      </p>
+    </div>
+  </section>
+
+  {/* ── HISTORY TIMELINE ── */}
+  <section style="background:var(--bg);padding:var(--space-10) var(--space-6);">
+    <div class="over-history-grid">
+      <div class="over-history-sticky">
+        <h2 style="font-family:var(--font-display);font-weight:400;font-size:var(--display-lg);line-height:0.9;letter-spacing:var(--tracking-display);margin:0;text-transform:uppercase;">
+          Onze<br/>tijdlijn
+        </h2>
+      </div>
+      <Timeline items={timeline} />
+    </div>
+  </section>
+
+
+<style>
+  .stats-grid {
+    max-width: var(--container);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .stat-divider {
+    border-right: var(--border-bold) solid var(--border-strong);
+  }
+  .over-two-col {
+    max-width: var(--container);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-10);
+    align-items: center;
+  }
+  .over-history-grid {
+    max-width: var(--container);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--space-10);
+    align-items: start;
+  }
+  .over-history-sticky {
+    position: sticky;
+    top: var(--space-8);
+  }
+  @media (max-width: 700px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+    .stat-divider {
+      border-right: none;
+      border-bottom: var(--border-bold) solid var(--border-strong);
+    }
+    .over-two-col {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+    .over-two-col--reverse > :first-child {
+      order: 1;
+    }
+    .over-history-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+    .over-history-sticky {
+      position: static;
+    }
+  }
+</style>
+</Layout>

@@ -1,0 +1,35 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getReglementen, formatReglementDate } from '../../lib/reglementen';
+
+const grouped = await getReglementen();
+const reglementen = [...grouped].map(([slug, versions]) => ({ slug, latest: versions[0], count: versions.length }));
+---
+
+<Layout title="Reglementen - NAIS" active="">
+  <section data-theme="asphalt" style="background:var(--asphalt);padding:var(--space-10) var(--space-6) var(--space-8);">
+    <div class="nais-container">
+      <span class="nais-kicker nais-accent nais-eyebrow-block">Reglementen</span>
+      <h1 style="font-family:var(--font-display);font-weight:400;font-size:clamp(40px,5.6vw,80px);line-height:0.9;letter-spacing:var(--tracking-display);color:var(--bone);margin:0 0 var(--space-5);">
+        Reglementen
+      </h1>
+      <p style="font-family:var(--font-sans);font-size:var(--text-base);color:var(--concrete-200);max-width:52ch;line-height:1.6;margin:0;">
+        De officiële wedstrijdreglementen van de NAIS bond. Elke versie blijft bewaard, zodat altijd terug te vinden is welke regels golden.
+      </p>
+    </div>
+  </section>
+
+  <section class="nais-section">
+    <div style="max-width:var(--container);margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--space-5);">
+      {reglementen.map(({ slug, latest, count }) => (
+        <a href={`/reglementen/${slug}`} style="display:flex;flex-direction:column;gap:var(--space-3);padding:var(--space-5);border:var(--border-bold) solid var(--border-strong);border-radius:var(--radius-sm);background:var(--bg-elevated);color:var(--text);text-decoration:none;">
+          <span class="nais-kicker nais-accent">v{latest.data.version} · {formatReglementDate(latest.data.date)}</span>
+          <span style="font-family:var(--font-display);font-size:var(--display-sm);line-height:0.95;letter-spacing:var(--tracking-display);">{latest.data.title}</span>
+          <span style="font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted);">
+            {count === 1 ? '1 versie' : `${count} versies`} · Lees reglement →
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>

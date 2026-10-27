@@ -1,0 +1,19 @@
+---
+// Permanent URL for one specific version, e.g. /reglementen/nk/1.0.0
+import Layout from '../../../layouts/Layout.astro';
+import ReglementView from '../../../components/ReglementView.astro';
+import { getReglementen } from '../../../lib/reglementen';
+
+export async function getStaticPaths() {
+  const grouped = await getReglementen();
+  return [...grouped].flatMap(([slug, versions]) =>
+    versions.map(entry => ({ params: { slug, version: entry.data.version }, props: { entry, versions } }))
+  );
+}
+
+const { entry, versions } = Astro.props;
+---
+
+<Layout title={`Reglement ${entry.data.shortTitle} v${entry.data.version} - NAIS`} active="">
+  <ReglementView entry={entry} versions={versions} />
+</Layout>

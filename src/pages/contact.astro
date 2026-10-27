@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Contact - NAIS" active="Contact">
+  <section data-theme="asphalt" style="background:var(--asphalt);color:var(--bone);padding:var(--space-9) var(--space-6);">
+    <div style="max-width:var(--container);margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8);align-items:start;">
+      <div>
+        <h1 style="font-family:var(--font-display);font-weight:400;font-size:var(--display-xl);line-height:0.9;letter-spacing:var(--tracking-display);color:var(--bone);margin:0;">Kom in contact</h1>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-5);padding-top:var(--space-6);">
+        <div style="border:var(--border-bold) solid var(--asphalt-line);border-radius:var(--radius-sm);padding:var(--space-6);">
+          <span class="nais-kicker nais-accent">WhatsApp</span>
+          <p style="font-family:var(--font-sans);color:var(--concrete-200);margin:var(--space-3) 0 var(--space-5);line-height:1.5;">Het makkelijkst om in contact te komen is via onze WhatsApp-groep. Je kan lid worden van de groep door op de link te klikken, openbaar en iedereen welkom.</p>
+          <a class="nais-btn" href="https://chat.whatsapp.com/HubB3iJi916J0AnmBOYMho?mode=gi_t" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-sans);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:0.04em;padding:10px 18px;background:var(--volt);color:var(--volt-ink);border:1px solid var(--volt);border-radius:var(--radius-pill);text-decoration:none;">
+            Doe mee met de groep →
+          </a>
+        </div>
+        <div style="border:var(--border-bold) solid var(--asphalt-line);border-radius:var(--radius-sm);padding:var(--space-6);">
+          <span class="nais-kicker nais-accent">E-mail</span>
+          <a href="mailto:info@naisbond.nl" style="display:block;font-family:var(--font-display);font-weight:400;font-size:var(--display-md);letter-spacing:var(--tracking-display);color:var(--bone);text-decoration:none;margin-top:var(--space-3);line-height:1.1;">
+            info@naisbond.nl
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
