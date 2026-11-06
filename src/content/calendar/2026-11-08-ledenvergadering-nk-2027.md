@@ -20,8 +20,12 @@ Tijd voor de ledenvergadering! Op **8 november om 18:00** komen we samen bij Thi
 
 # Agenda
 
-* Het reglement voor het **NK 2027** bespreken
-* Terugblik: hoe ging het **NK 2026**?
+* Financieel jaar overzicht 2025, en 2026 tot nu toe
+* Kosten
+* NK 2026
+* NK 2027
+* Open forum
+
 
 ## Iets op de agenda?
 
